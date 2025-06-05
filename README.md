@@ -1,11 +1,11 @@
-# 🧠 AutoBrief – Intelligent News Summarizer with Bias Detection
+#  AutoBrief – Intelligent News Summarizer with Bias Detection
 
 AutoBrief is a Flask-based web application that helps users analyze news articles using AI.  
 It summarizes lengthy articles and detects potential bias using NLP techniques.
 
 ---
 
-## 🚀 Features
+## Features
 
 - 🔍 **News Summarization** (Abstractive + Extractive using BART/T5)
 - 🧭 **Bias Detection** (via sentiment & subjectivity analysis using TextBlob/VADER)
@@ -38,14 +38,14 @@ AutoBrief/
 └── README.md              
 
 
-## 💡 How It Works
+##  How It Works
 
 1. Paste a news article or URL
 2. App extracts and summarizes key points
 3. It analyzes the sentiment and detects bias
 4. You get a concise summary and a bias report 🔥
 
-## 📦 Installation (Local Setup)
+##  Installation (Local Setup)
 
 ```bash
 git clone https://github.com/Sree051203/AutoBrief.git
@@ -57,7 +57,7 @@ python app.py
 
 Then open your browser at http://127.0.0.1:5000
 
-🌐 Live Demo-Coming Soon on Render / Replit!
+ Live Demo-Coming Soon on Render / Replit!
 
 ✨ Author
 Sreelakshmi M

@@ -28,4 +28,48 @@ It summarizes lengthy articles and detects potential bias using NLP techniques.
 ---
 
 ## 📂 Folder Structure
+AutoBrief/
+├── app.py                 # Flask app routes and backend logic
+├── requirements.txt       # Required Python packages
+├── templates/             # Contains HTML files (e.g., index.html)
+│   └── index.html
+├── .venv/                 # Virtual environment (ignored by git)
+├── .gitignore             # Lists files/folders to ignore in git commits
+└── README.md              # Project README with instructions and info
+
+## 💡 How It Works
+
+1. Paste a news article or URL
+2. App extracts and summarizes key points
+3. It analyzes the sentiment and detects bias
+4. You get a concise summary and a bias report 🔥
+
+## 📦 Installation (Local Setup)
+
+```bash
+git clone https://github.com/Sree051203/AutoBrief.git
+cd AutoBrief/backend
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+pip install -r requirements.txt
+python app.py
+
+Then open your browser at http://127.0.0.1:5000
+
+🌐 Live Demo-Coming Soon on Render / Replit!
+
+✨ Author
+Sreelakshmi M
+🚀 ML + AI Developer | Founder @ spydX(https://thespydx.com)
+📫 LinkedIn | GitHub 
+
+📜 License
+## ✅ Final Step
+
+1. Copy this README into your `README.md` on GitHub or VS Code
+2. Commit & push:
+```bash
+git add README.md
+git commit -m "Added detailed README for AutoBrief"
+git push
 

@@ -33,7 +33,6 @@ AutoBrief/
 ├── requirements.txt       
 ├── templates/             
 │   └── index.html                                                                                                                                                                                                    
-|
 ├── .venv/                 
 ├── .gitignore            
 └── README.md              

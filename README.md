@@ -32,7 +32,7 @@ AutoBrief/
 ├── app.py                
 ├── requirements.txt       
 ├── templates/             
-│   └── index.html
+│   └── index.html                                                                                                                                                                                                    
 |
 ├── .venv/                 
 ├── .gitignore            

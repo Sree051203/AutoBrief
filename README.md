@@ -29,13 +29,14 @@ It summarizes lengthy articles and detects potential bias using NLP techniques.
 
 ## 📂 Folder Structure
 AutoBrief/
-├── app.py                 # Flask app routes and backend logic
-├── requirements.txt       # Required Python packages
-├── templates/             # Contains HTML files (e.g., index.html)
+├── app.py                
+├── requirements.txt       
+├── templates/             
 │   └── index.html
-├── .venv/                 # Virtual environment (ignored by git)
-├── .gitignore             # Lists files/folders to ignore in git commits
-└── README.md              # Project README with instructions and info
+├── .venv/                 
+├── .gitignore            
+└── README.md              
+
 
 ## 💡 How It Works
 

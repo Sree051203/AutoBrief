@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>News Summarizer & Bias Detector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-type-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-group:hover {
+            border-color: #4facfe;
+            background-color: #f8f9ff;
+        }
+
+        .radio-group input[type="radio"] {
+            margin: 0;
+        }
+
+        .radio-group.active {
+            border-color: #4facfe;
+            background-color: #f0f8ff;
+            color: #4facfe;
+            font-weight: 600;
+        }
+
+        select,
+        input[type="url"],
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus,
+        input[type="url"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #languageSelect {
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto 0;
+            min-width: 200px;
+        }
+
+        .analyze-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4facfe;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .results {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .result-card {
+            background: #f8f9ff;
+            border: 1px solid #e0e8ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .result-card h3 {
+            color: #4facfe;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-card h3::before {
+            content: "📄";
+        }
+
+        .bias-card h3::before {
+            content: "🎯";
+        }
+
+        .summary-text {
+            line-height: 1.6;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .bias-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .metric {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #4facfe;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .metric-score {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .error {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c66;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .input-type-selector {
+                flex-direction: column;
+            }
+
+            .bias-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .language-selector {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #languageSelect {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>News Summarizer & Bias Detector</h1>
+            <p>Analyze news articles for content and bias in multiple languages</p>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <div class="form-group">
+                    <label>Choose Input Type:</label>
+                    <div class="input-type-selector">
+                        <div class="radio-group active" onclick="selectInputType('text')">
+                            <input type="radio" id="textInput" name="inputType" value="text" checked />
+                            <label for="textInput">Direct Text</label>
+                        </div>
+                        <div class="radio-group" onclick="selectInputType('url')">
+                            <input type="radio" id="urlInput" name="inputType" value="url" />
+                            <label for="urlInput">News URL</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="language-selector">
+                        <label for="languageSelect">Analysis Language:</label>
+                        <select id="languageSelect">
+                            <option value="en">English</option>
+                            <option value="hi">Hindi</option>
+                            <option value="ml">Malayalam</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="textContent" id="contentLabel">Enter News Article Text:</label>
+                    <textarea
+                        id="textContent"
+                        placeholder="Paste your news article text here..."
+                    ></textarea>
+                    <input
+                        type="url"
+                        id="urlContent"
+                        placeholder="https://example.com/news-article"
+                        style="display: none"
+                    />
+                </div>
+
+                <button class="analyze-btn" onclick="analyzeContent()">Analyze Article</button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing article and detecting bias...</p>
+            </div>
+
+            <div class="error" id="error" style="display: none"></div>
+
+            <div class="results" id="results">
+                <div class="result-card">
+                    <h3 id="summaryTitle">Summary</h3>
+                    <div class="summary-text" id="summaryText"></div>
+                    <div class="stats">
+                        <span
+                            >Original: <span id="originalLength">0</span> chars</span
+                        >
+                        <span
+                            >Summary: <span id="summaryLength">0</span> chars</span
+                        >
+                    </div>
+                </div>
+
+                <div class="result-card bias-card">
+                    <h3 id="biasTitle">Bias Analysis</h3>
+                    <div class="bias-metrics">
+                        <div class="metric">
+                            <div class="metric-label" id="polarityTitle">Polarity</div>
+                            <div class="metric-value" id="polarityLabel">Neutral</div>
+                            <div class="metric-score">
+                                Score: <span id="polarityScore">0</span>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label" id="subjectivityTitle">
+                                Subjectivity
+                            </div>
+                            <div class="metric-value" id="subjectivityLabel">
+                                Objective
+                            </div>
+                            <div class="metric-score">
+                                Score: <span id="subjectivityScore">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer
+        style="
+            text-align: center;
+            padding: 15px 10px;
+            font-size: 0.9rem;
+            color: white;
+            font-weight: 600;
+            margin-top: 40px;
+            user-select: none;
+        "
+    >
+        Made with ❤️ by Sreelakshmi
+    </footer>
+
+    <script>
+        function selectInputType(type) {
+            
+            document.querySelectorAll('.radio-group').forEach((group) => {
+                group.classList.remove('active');
+            });
+
+            if (type === 'text') {
+                document.querySelector('.radio-group:first-child').classList.add('active');
+                document.getElementById('textInput').checked = true;
+                document.getElementById('textContent').style.display = 'block';
+                document.getElementById('urlContent').style.display = 'none';
+                document.getElementById('contentLabel').textContent =
+                    'Enter News Article Text:';
+            } else {
+                document.querySelector('.radio-group:last-child').classList.add('active');
+                document.getElementById('urlInput').checked = true;
+                document.getElementById('textContent').style.display = 'none';
+                document.getElementById('urlContent').style.display = 'block';
+                document.getElementById('contentLabel').textContent = 'Enter News Article URL:';
+            }
+
+            
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+        }
+
+        async function analyzeContent() {
+            const inputType = document.querySelector('input[name="inputType"]:checked').value;
+            const language = document.getElementById('languageSelect').value;
+            const content =
+                inputType === 'text'
+                    ? document.getElementById('textContent').value.trim()
+                    : document.getElementById('urlContent').value.trim();
+
+            
+            if (!content) {
+                showError('Please provide content to analyze.');
+                return;
+            }
+
+            if (inputType === 'text' && content.length < 50) {
+                showError('Please provide at least 50 characters of text for analysis.');
+                return;
+            }
+
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            document.querySelector('.analyze-btn').disabled = true;
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        input_type: inputType,
+                        content: content,
+                        language: language,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    showError(data.error);
+                } else {
+                    showResults(data);
+                }
+            } catch (error) {
+                showError('Failed to analyze content. Please check your connection and try again.');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.querySelector('.analyze-btn').disabled = false;
+            }
+        }
+
+        function showError(message) {
+            const errorElement = document.getElementById('error');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+        }
+
+        function showResults(data) {
+            
+            if (data.translations) {
+                document.getElementById('summaryTitle').textContent =
+                    data.translations.summary_title;
+                document.getElementById('biasTitle').textContent = data.translations.bias_title;
+                document.getElementById('polarityTitle').textContent =
+                    data.translations.polarity_title;
+                document.getElementById('subjectivityTitle').textContent =
+                    data.translations.subjectivity_title;
+            }
+
+            
+            document.getElementById('summaryText').textContent = data.summary;
+            document.getElementById('originalLength').textContent = data.original_length;
+            document.getElementById('summaryLength').textContent = data.summary_length;
+
+            
+            document.getElementById('polarityLabel').textContent = data.bias.polarity_label;
+            document.getElementById('polarityScore').textContent = data.bias.polarity;
+            document.getElementById('subjectivityLabel').textContent =
+                data.bias.subjectivity_label;
+            document.getElementById('subjectivityScore').textContent = data.bias.subjectivity;
+
+            
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+
+            
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+                analyzeContent();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -57,20 +57,9 @@ python app.py
 
 Then open your browser at http://127.0.0.1:5000
 
- Live Demo-Coming Soon on Render / Replit!
+ Live Demo-Coming Soon on Render
 
 ✨ Author
 Sreelakshmi M
 🚀 ML + AI Developer | Founder @ spydX(https://thespydx.com)
 📫 LinkedIn | GitHub 
-
-📜 License
-## ✅ Final Step
-
-1. Copy this README into your `README.md` on GitHub or VS Code
-2. Commit & push:
-```bash
-git add README.md
-git commit -m "Added detailed README for AutoBrief"
-git push
-

@@ -45,18 +45,6 @@ AutoBrief/
 3. It analyzes the sentiment and detects bias
 4. You get a concise summary and a bias report 🔥
 
-##  Installation (Local Setup)
-
-```bash
-git clone https://github.com/Sree051203/AutoBrief.git
-cd AutoBrief/backend
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
-pip install -r requirements.txt
-python app.py
-
-Then open your browser at http://127.0.0.1:5000
-
  Live Demo-Coming Soon on Render
 
 ✨ Author

@@ -29,6 +29,7 @@ It summarizes lengthy articles and detects potential bias using NLP techniques.
 
 ## 📂 Folder Structure
 AutoBrief/
+
 ├── app.py                
 ├── requirements.txt       
 ├── templates/             

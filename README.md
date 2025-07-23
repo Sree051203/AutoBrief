@@ -33,9 +33,7 @@ AutoBrief/
 ├── app.py                
 ├── requirements.txt       
 ├── templates/             
-│   └── index.html                                                                                                                                                                                                    
-├── .venv/                 
-├── .gitignore            
+│   └── index.html                                                                                                                                                                                                               
 └── README.md              
 
 
